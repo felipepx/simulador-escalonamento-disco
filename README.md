@@ -1,18 +1,32 @@
-[README.md](https://github.com/user-attachments/files/28976994/README.md)
-#  Simulador de Escalonamento de Braço de Disco
+[README(1).md](https://github.com/user-attachments/files/29182946/README.1.md)
+#  Simuladores Didáticos de Sistemas Operacionais
 
-Simulador didático desenvolvido em Python 3 para a disciplina de **Sistemas Operacionais**.  
-Demonstra e compara três algoritmos clássicos de escalonamento de disco, passo a passo no terminal.
+Simuladores desenvolvidos em Python 3 para a disciplina de **Sistemas Operacionais**.  
+Cada simulador demonstra, passo a passo no terminal, a lógica de um algoritmo clássico de S.O.
+
+**Universidade Federal do Oeste do Pará — UFOPA**  
+Bacharelado em Sistemas de Informação — Trabalho em Grupo 2
 
 ---
 
-##  Algoritmos Implementados
+##  Integrantes
 
-| Algoritmo | Descrição |
-|-----------|-----------|
-| **FCFS** (First Come, First Served) | Atende as requisições na ordem exata de chegada, sem otimização |
-| **SSTF** (Shortest Seek Time First) | A cada passo, escolhe o cilindro mais próximo da posição atual |
-| **SCAN** (Elevador) | O braço percorre uma direção atendendo tudo; ao chegar ao extremo, inverte |
+- Felipe Brito da Paixão
+- Kaio Junio Farias Pereira
+- Sebastiao Castilho Sanches Neto
+- Kleydson de Jesus Fernandes
+- João Pedro Magalhães Carvalho
+
+---
+
+##  Simuladores
+
+| Arquivo | Tema | Algoritmos |
+|---------|------|-----------|
+| `simulador_paginas.py` | Substituição de Páginas | FIFO, LRU |
+| `simulador_banqueiro.py` | Algoritmo do Banqueiro | Verificação de estado seguro |
+| `simulador_disco.py` | Escalonamento de Disco | FCFS, SSTF, SCAN |
+| `simulador_alocacao.py` | Alocação de Blocos no Disco | Contígua, Encadeada, Indexada |
 
 ---
 
@@ -21,63 +35,73 @@ Demonstra e compara três algoritmos clássicos de escalonamento de disco, passo
 **Requisitos:** Python 3.x (sem bibliotecas externas)
 
 ```bash
+python simulador_paginas.py
+python simulador_banqueiro.py
 python simulador_disco.py
+python simulador_alocacao.py
 ```
 
-O programa solicitará os seguintes dados (pressione **ENTER** para usar os valores padrão):
-
-```
-Posição inicial do braço [padrão: 53]:
-Fila de requisições [padrão: 98 183 37 122 14 124 65 67]:
-Cilindro máximo do disco [padrão: 199]:
-Direção inicial do SCAN (crescente/decrescente) [padrão: crescente]:
-```
+Cada simulador é interativo: pressione **ENTER** para usar os valores padrão ou digite os seus próprios.
 
 ---
 
-##  Exemplo de Saída
+##  Descrição dos Simuladores
 
-```
-=======================================================
-  SIMULADOR DE ESCALONAMENTO DE BRAÇO DE DISCO
-=======================================================
+### 01 — Substituição de Páginas (`simulador_paginas.py`)
+Simula o comportamento da memória virtual quando todos os frames estão ocupados.
 
-  Posição inicial do braço [padrão: 53]: 90
-  Fila de requisições [padrão: ...]: 
-  Cilindro máximo do disco [padrão: 199]: 
-  Direção inicial do SCAN (crescente/decrescente) [padrão: crescente]: 
+**Entrada:** sequência de referências a páginas e número de frames da RAM  
+**Saída:** estado da memória a cada acesso, total de page faults e comparativo
 
-=======================================================
-  COMPARATIVO FINAL
-=======================================================
-
-  Algoritmo  Cilindros Percorridos     Eficiência
-  --------------------------------------------------
-  FCFS       603
-  SSTF       313
-  SCAN       245                        ← MAIS EFICIENTE
-```
+| Algoritmo | Descrição |
+|-----------|-----------|
+| FIFO | Substitui a página que está na memória há mais tempo |
+| LRU | Substitui a página usada há mais tempo (menos recente) |
 
 ---
 
-##  Estrutura do Projeto
+### 02 — Algoritmo do Banqueiro (`simulador_banqueiro.py`)
+Previne deadlocks verificando se o estado do sistema permanece seguro antes de conceder recursos.
 
-```
- simulador-disco/
-├── simulador_disco.py   # Código principal
-├── README.md            # Este arquivo
-└── relatorio.docx       # Relatório técnico (entrega)
-```
+**Entrada:** matriz de alocação, matriz de necessidade máxima, vetor de disponível  
+**Saída:** estado seguro/inseguro, sequência segura, concessão ou negação de cada requisição
 
 ---
 
-## ⚙️ Funcionalidades
+### 03 — Escalonamento de Disco (`simulador_disco.py`)
+Compara estratégias de atendimento de requisições de leitura/escrita no disco rígido.
+
+**Entrada:** posição inicial do braço, fila de cilindros, cilindro máximo, direção do SCAN  
+**Saída:** passo a passo de cada algoritmo, total de cilindros percorridos e comparativo
+
+| Algoritmo | Descrição |
+|-----------|-----------|
+| FCFS | Atende na ordem de chegada, sem otimização |
+| SSTF | Sempre escolhe a requisição mais próxima |
+| SCAN | Varre em uma direção e inverte ao chegar ao extremo |
+
+---
+
+### 04 — Alocação de Blocos (`simulador_alocacao.py`)
+Demonstra como sistemas de arquivos organizam os dados no disco.
+
+**Entrada:** número de blocos do disco, arquivos e seus tamanhos  
+**Saída:** mapa visual do disco `[A][A][B][B][ ][ ]...` e tabela de alocação
+
+| Estratégia | Descrição |
+|-----------|-----------|
+| Contígua | Blocos sequenciais — acesso rápido, fragmentação externa |
+| Encadeada | Cada bloco aponta para o próximo — sem fragmentação, acesso lento |
+| Indexada | i-node centraliza os endereços — acesso direto e flexível |
+
+---
+
+##  Funcionalidades Comuns
 
 - Entrada interativa com valores padrão prontos para teste
-- Validação automática de requisições fora do intervalo do disco
-- Direção do SCAN flexível (aceita variações de digitação)
-- Exibição do passo a passo de cada algoritmo
-- Comparativo final destacando o algoritmo mais eficiente
+- Validação de entradas com avisos claros ao usuário
+- Exibição passo a passo de cada algoritmo
+- Comparativo final destacando o resultado mais eficiente
 
 ---
 
@@ -85,14 +109,4 @@ Direção inicial do SCAN (crescente/decrescente) [padrão: crescente]:
 
 **Sistemas Operacionais** — Bacharelado em Sistemas de Informação  
 Universidade Federal do Oeste do Pará — UFOPA  
-Simuladores Didáticos
-
----
-
-##  Integrantes
-
-- FELIPE BRITO DA PAIXÃO
-- KAIO JUNIO FARIAS PEREIRA
-- SEBASTIAO CASTILHO SANCHES NETO
-- KLEYDSON DE JESUS FERNANDES
-- JOÃO PEDRO MAGALHÃES CARVALHO
+Trabalho em Grupo 2 — Simuladores Didáticos de S.O.
